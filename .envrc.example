@@ -1,0 +1,5 @@
+export POSTGRES_URL=""
+export PORT="3000"
+export MODE="DEV"
+export RUN_MIGRATIONS=true
+export JWT_SECRET=''
