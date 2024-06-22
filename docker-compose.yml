@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ensenas_docker_db
+    volumes:
+      - './docker/database/:/var/lib/postgresql/data'
+    ports:
+      - '5433:5432'
+    networks:
+      - ensenas-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - '8080:80'
+    depends_on:
+      - postgres
+    networks:
+      - ensenas-network
+
+  app:
+    build:
+      context: ..
+      dockerfile: docker/dockerfile.app.yml
+    container_name: ensenas-back
+    env_file:
+      - .docker_app_env
+    networks:
+      - ensenas-network
+    ports:
+      - '3001:3001'
+    depends_on:
+      - postgres
+    logging: # Add this section for logging configuration
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
+
+networks:
+  ensenas-network:
+    external: true
