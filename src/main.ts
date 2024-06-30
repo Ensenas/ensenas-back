@@ -14,8 +14,8 @@ async function bootstrap() {
   )
 
   const options = new DocumentBuilder()
-    .setTitle('AIFA Main Backend')
-    .setDescription('AIFA bakend')
+    .setTitle('Enseñas Backend')
+    .setDescription('Enseñas backend v1.0.0')
     .setVersion(process.env.VERSION ? process.env.VERSION : 'no-version')
     .addTag('v0.0.1-MVP')
     .addBearerAuth()
