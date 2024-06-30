@@ -1,13 +1,12 @@
 import { ExtractJwt, Strategy } from 'passport-jwt'
 import { PassportStrategy } from '@nestjs/passport'
 import { Injectable, Logger } from '@nestjs/common'
-import AIFAError from 'src/utils/AIFAError'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     if (!process.env.JWT_SECRET) {
-      throw AIFAError.fromMessage('PLEASE PROVIDE JWT SECRET')
+      throw Error('PLEASE PROVIDE JWT SECRET')
     }
 
     super({
