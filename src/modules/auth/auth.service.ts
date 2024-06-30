@@ -26,7 +26,7 @@ export class AuthService {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
-          message: 'ENSENÑAS-BACKEND: USER NOT FOUND',
+          message: 'ENSEÑAS-BACK: USER NOT FOUND',
         },
         HttpStatus.NOT_FOUND,
       )
@@ -47,7 +47,7 @@ export class AuthService {
       throw new HttpException(
         {
           status: HttpStatus.UNAUTHORIZED,
-          message: 'AIFA-BACKEND: VALIDATION FAILED',
+          message: 'ENSEÑAS-BACK: VALIDATION FAILED',
         },
         HttpStatus.UNAUTHORIZED,
       )

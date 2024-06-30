@@ -15,7 +15,7 @@ async function bootstrap() {
 
   const options = new DocumentBuilder()
     .setTitle('Enseñas Backend')
-    .setDescription('Enseñas backend v1.0.0')
+    .setDescription('Enseñas bakend')
     .setVersion(process.env.VERSION ? process.env.VERSION : 'no-version')
     .addTag('v0.0.1-MVP')
     .addBearerAuth()

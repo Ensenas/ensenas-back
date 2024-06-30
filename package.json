@@ -1,5 +1,5 @@
 {
-  "name": "ensenas-back",
+  "name": "aifa-back-final",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -48,6 +48,7 @@
     "cache-manager": "^5.5.2",
     "chalk": "^4.1.2",
     "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
