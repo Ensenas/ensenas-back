@@ -26,7 +26,7 @@ export class AuthService {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
-          message: 'FONDER-BACKEND: USER NOT FOUND',
+          message: 'ENSENÑAS-BACKEND: USER NOT FOUND',
         },
         HttpStatus.NOT_FOUND,
       )
