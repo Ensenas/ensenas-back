@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'
 import { Request } from 'express'
 
 import { CreateUserDTO } from './dto/create-user.dto'
-import { User } from './user.entity'
+import { User } from './models/user.entity'
 import Encryption from 'src/utils/Encryption'
 import { Role } from './interfaces'
 import { InjectRepository } from '@nestjs/typeorm'
