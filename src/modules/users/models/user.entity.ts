@@ -4,11 +4,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
-import { Role } from './interfaces/user'
-import { Country } from '../country/country.entity'
+import { Role } from '../interfaces/user'
+import { Country } from '../../country/country.entity'
+import { Payment } from './payment.entity'
 
 @Entity()
 export class User {
@@ -52,4 +54,7 @@ export class User {
     nullable: true,
   })
   role: Role
+
+  @OneToMany(() => Payment, (payment) => payment.user)
+  payments: Payment[]
 }
