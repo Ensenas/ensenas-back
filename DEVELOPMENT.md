@@ -7,4 +7,5 @@
 - [x] User
 - [] UserProgress
 - [x] Country
-- []
+- [x] Payment
+- [] Lesson
