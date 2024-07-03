@@ -5,9 +5,6 @@ export interface JWTUser {
 
 export enum Role {
   USER = 'USER',
-  COURT = 'COURT',
-  ARBITER = 'ARBITER',
-  DELEGATE = 'DELEGATE',
   ADMIN = 'ADMIN',
 }
 
