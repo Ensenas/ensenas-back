@@ -12,7 +12,7 @@ import { Role } from '../interfaces/user'
 import { Country } from '../../country/country.entity'
 import { Payment } from './payment.entity'
 
-@Entity()
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string

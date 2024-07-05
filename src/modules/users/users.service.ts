@@ -19,7 +19,7 @@ export class UsersService {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          message: 'AIFA-BACKEND: USER ALREADY REGISTERED',
+          message: 'ENSEÑAS-BACKEND: USER ALREADY REGISTERED',
         },
         HttpStatus.BAD_REQUEST,
       )
@@ -27,12 +27,21 @@ export class UsersService {
 
     const passwordHash = await Encryption.getInstance().hash(createUserDTO.password)
 
-    createUserDTO.password = passwordHash
-    createUserDTO.username = createUserDTO.mail.split('@')[0]
-    createUserDTO.roles = [Role.USER]
+    const { mail, name, surname, birthDate } = createUserDTO
+
+    // const createdUser = this.userRepository.create({
+    //   mail,
+    //   name,
+    //   surname,
+    //   birth_date: birthDate,
+    //   password: passwordHash,
+    //   country:
+    // })
+
+    const createdUser = this.userRepository.create({})
 
     /** TODO: MODIFY THIS RESPONSE TO JUST RETURN USER DATA AND NOT ALL INFO */
-    return this.userRepository.create(createUserDTO)
+    return createdUser
   }
 
   async findAll(request: Request): Promise<User[]> {

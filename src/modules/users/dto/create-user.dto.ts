@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator'
+import { IsDateString, IsEmail, IsNotEmpty, IsString } from 'class-validator'
 
 export class CreateUserDTO {
   @IsEmail()
@@ -16,15 +16,29 @@ export class CreateUserDTO {
 
   @IsString()
   @ApiProperty({
-    required: false,
-    description: 'User name',
+    required: true,
+    description: 'Name',
   })
-  username?: string
+  name: string
 
-  // @dev: This value is added internally and thus it is not required to be sent.
+  @IsString()
   @ApiProperty({
-    required: false,
-    description: 'Users role',
+    required: true,
+    description: 'Surname',
   })
-  roles?: string[]
+  surname: string
+
+  @IsDateString()
+  @ApiProperty({
+    required: true,
+    description: 'Birth Date',
+  })
+  birthDate: Date
+
+  @IsString()
+  @ApiProperty({
+    required: true,
+    description: 'User country',
+  })
+  country: string
 }

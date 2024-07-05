@@ -18,6 +18,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   private readonly logger = new Logger(JwtStrategy.name)
 
+  /**
+   * @dev Validate payload
+   * @param payload
+   * @dev username: Username
+   * @dev mail: User mail
+   * @dev roles: User roles (default to user)
+   * @returns
+   */
   async validate(payload: any) {
     return { username: payload.username, mail: payload.mail, roles: payload.roles }
   }

@@ -23,3 +23,5 @@ cp .envrc.example .envrc
 ```bash
 yarn dev
 ```
+
+Current swagger api will be available at http://localhost:${PORT}/api

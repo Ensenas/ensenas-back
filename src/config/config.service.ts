@@ -31,9 +31,9 @@ class ConfigService {
 
       entities: ['**/**/*.entity{.ts}'],
 
-      migrationsTableName: 'migration',
+      migrationsTableName: 'migrations',
 
-      migrations: ['src/migrations/*.ts'],
+      migrations: ['dist/migrations/*'],
 
       autoLoadEntities: true,
 
