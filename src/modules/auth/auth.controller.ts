@@ -13,7 +13,7 @@ export class AuthController {
 
   @Public()
   @HttpCode(HttpStatus.OK)
-  @Post('signUp')
+  @Post('sign-up')
   signUp(@Body() signUpDto: CreateUserDTO) {
     return this.usersService.create(signUpDto)
   }
@@ -23,6 +23,13 @@ export class AuthController {
   @Post('login')
   signIn(@Body() signInDto: SignInDTO) {
     return this.authService.login(signInDto)
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('google-login')
+  googlLogIn(@Body() signUpDto: CreateUserDTO) {
+    return this.usersService.create(signUpDto)
   }
 
   @ApiBearerAuth()
