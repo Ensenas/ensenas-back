@@ -42,3 +42,10 @@ export class CreateUserDTO {
   })
   country: string
 }
+
+export interface CreatedUser {
+  mail: string
+  name: string
+  surname: string
+  country: string
+}

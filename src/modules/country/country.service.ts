@@ -15,7 +15,17 @@ export class CountryService {
     return this.countryRepository.find(request.query)
   }
 
+  async findOne(name: string): Promise<Country> {
+    return await this._findByName(name)
+  }
+
   async remove(id: string) {
     return this.countryRepository.delete(id)
+  }
+
+  /************************ PRIVATE METHODS  ************************/
+
+  private async _findByName(name: string): Promise<Country> {
+    return this.countryRepository.findOneBy({ name: name })
   }
 }

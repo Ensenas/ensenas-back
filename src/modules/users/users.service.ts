@@ -1,20 +1,24 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'
 import { Request } from 'express'
 
-import { CreateUserDTO } from './dto/create-user.dto'
+import { CreatedUser, CreateUserDTO } from './dto/create-user.dto'
 import { User } from './models/user.entity'
 import Encryption from 'src/utils/Encryption'
 import { Role } from './interfaces'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { CountryService } from '../country/country.service'
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
+    private readonly countryService: CountryService,
+  ) {}
 
   private readonly logger = new Logger(UsersService.name)
 
-  async create(createUserDTO: CreateUserDTO): Promise<User> {
+  async create(createUserDTO: CreateUserDTO): Promise<CreatedUser> {
     if (await this._findByMail(createUserDTO.mail)) {
       throw new HttpException(
         {
@@ -27,21 +31,34 @@ export class UsersService {
 
     const passwordHash = await Encryption.getInstance().hash(createUserDTO.password)
 
-    const { mail, name, surname, birthDate } = createUserDTO
+    const { mail, name, surname, birthDate, country: countryName } = createUserDTO
 
-    // const createdUser = this.userRepository.create({
-    //   mail,
-    //   name,
-    //   surname,
-    //   birth_date: birthDate,
-    //   password: passwordHash,
-    //   country:
-    // })
+    const foundCountry = await this.countryService.findOne(countryName)
+    if (!foundCountry) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'ENSEÑAS-BACKEND: COUNTRY NOT FOUND',
+        },
+        HttpStatus.BAD_REQUEST,
+      )
+    }
 
-    const createdUser = this.userRepository.create({})
+    this.userRepository.create({
+      mail,
+      name,
+      surname,
+      birth_date: birthDate,
+      password: passwordHash,
+      country: foundCountry,
+    })
 
-    /** TODO: MODIFY THIS RESPONSE TO JUST RETURN USER DATA AND NOT ALL INFO */
-    return createdUser
+    return {
+      mail: mail,
+      name: name,
+      surname: surname,
+      country: foundCountry.name,
+    }
   }
 
   async findAll(request: Request): Promise<User[]> {
