@@ -9,7 +9,7 @@ export enum Role {
 }
 
 export interface UserInfo {
-  username: string
   mail: string
+  username: string
   roles: string[]
 }

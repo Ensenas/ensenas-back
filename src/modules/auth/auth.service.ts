@@ -25,10 +25,10 @@ export class AuthService {
     if (!userFound) {
       throw new HttpException(
         {
-          status: HttpStatus.NOT_FOUND,
-          message: 'ENSEÑAS-BACK: USER NOT FOUND',
+          status: HttpStatus.BAD_REQUEST,
+          message: 'ENSEÑAS-BACK: USER OR PASSWORD ERROR',
         },
-        HttpStatus.NOT_FOUND,
+        HttpStatus.BAD_REQUEST,
       )
     }
 
@@ -37,9 +37,11 @@ export class AuthService {
     if (valid) {
       const payload = {
         mail: userFound.mail,
-        role: userFound.role,
+        name: userFound.name,
+        surname: userFound.surname,
+        roles: userFound.roles,
       }
-      const accessToken = this.jwtService.sign(payload)
+      const accessToken = await this.jwtService.signAsync(payload)
       return {
         access_token: accessToken,
       }

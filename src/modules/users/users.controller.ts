@@ -14,7 +14,7 @@ export class UsersController {
 
   @Public()
   @Get()
-  //@Roles(Role.ADMIN)
+  @Roles(Role.ADMIN)
   findAll(@Req() request: Request) {
     return this.usersService.findAll(request)
   }

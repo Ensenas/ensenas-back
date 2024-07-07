@@ -1,9 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'
 import { Request } from 'express'
 
 import { Country } from './country.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { CreateCountryDto } from './dto/create.dto'
 
 @Injectable()
 export class CountryService {
@@ -21,6 +22,21 @@ export class CountryService {
 
   async remove(id: string) {
     return this.countryRepository.delete(id)
+  }
+
+  async create(country: CreateCountryDto): Promise<void> {
+    const { name } = country
+    const foundCountry = await this._findByName(name.toLowerCase())
+    if (foundCountry) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'ENSEÑAS-BACKEND: COUNTRY ALREADY EXISTS',
+        },
+        HttpStatus.BAD_REQUEST,
+      )
+    }
+    await this.countryRepository.save({ name })
   }
 
   /************************ PRIVATE METHODS  ************************/

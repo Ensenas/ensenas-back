@@ -5,6 +5,7 @@ import { CreateUserDTO } from '../users/dto/create-user.dto'
 import { SignInDTO } from './dto/sign-in.dto'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { Public } from './decorators/public.decorator'
+import { UserInfo } from '../users/interfaces'
 
 @Controller('auth')
 @ApiTags('Authorization')
@@ -34,7 +35,12 @@ export class AuthController {
 
   @ApiBearerAuth()
   @Get('profile')
-  getProfile(@Request() req) {
-    return req.user
+  getProfile(@Request() req): UserInfo {
+    const { mail, username, roles } = req.user
+    return {
+      mail: mail,
+      username: username,
+      roles: roles,
+    }
   }
 }
