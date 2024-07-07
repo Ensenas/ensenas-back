@@ -43,7 +43,11 @@ export class CreateUserDTO {
   country: string
 }
 
+/**
+ * @dev Create user server response
+ */
 export interface CreatedUser {
+  id: string
   mail: string
   name: string
   surname: string
