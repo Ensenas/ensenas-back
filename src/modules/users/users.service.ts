@@ -51,6 +51,7 @@ export class UsersService {
       birth_date: birthDate,
       password: passwordHash,
       country: foundCountry,
+      roles: [Role.USER],
     })
 
     return {

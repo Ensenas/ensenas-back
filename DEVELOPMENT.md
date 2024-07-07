@@ -6,6 +6,8 @@
 
 * [Typeorm](https://typeorm.io/)
 
+* [JWT-Decoder](https://jwt.io/)
+
 ### Tables
 
 - [x] User
@@ -15,15 +17,3 @@
 - [] Lesson
 
 ### Migrations
-
-1. Creation:
-
-```bash
-npx typeorm migration:create src/migrations/CreateCountries
-```
-
-2. Running:
-
-```bash
-npx typeorm migration:run
-```
