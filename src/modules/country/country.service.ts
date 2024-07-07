@@ -16,7 +16,7 @@ export class CountryService {
   }
 
   async findOne(name: string): Promise<Country> {
-    return await this._findByName(name)
+    return await this._findByName(name.toLowerCase())
   }
 
   async remove(id: string) {

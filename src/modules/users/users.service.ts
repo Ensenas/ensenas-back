@@ -44,7 +44,7 @@ export class UsersService {
       )
     }
 
-    this.userRepository.create({
+    const res = await this.userRepository.save({
       mail,
       name,
       surname,
@@ -54,6 +54,7 @@ export class UsersService {
     })
 
     return {
+      id: res.id,
       mail: mail,
       name: name,
       surname: surname,
