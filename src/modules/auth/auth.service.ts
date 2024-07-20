@@ -39,7 +39,7 @@ export class AuthService {
         mail: userFound.mail,
         name: userFound.name,
         surname: userFound.surname,
-        roles: userFound.roles,
+        role: userFound.role,
       }
       const accessToken = await this.jwtService.signAsync(payload)
       return {

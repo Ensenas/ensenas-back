@@ -7,19 +7,10 @@ const hashPassword = async (password: string) => {
 
 if (require.main === module) {
   ;(async () => {
-    const args = process.argv.slice(2)
-    if (args.length !== 1) {
-      console.error('Usage: node hashPassword.js <password>')
-      process.exit(1)
-    }
-
-    const password = args[0]
-    try {
-      const hashedPassword = await hashPassword(password)
-      console.log(`Hashed Password: ${hashedPassword}`)
-    } catch (error) {
-      console.error('Error hashing password:', error)
-      process.exit(1)
+    if (process.argv[2]) {
+      console.log(process.argv[2])
+      const hashedPassword = await hashPassword(process.argv[2])
+      console.log(hashedPassword)
     }
   })()
 }

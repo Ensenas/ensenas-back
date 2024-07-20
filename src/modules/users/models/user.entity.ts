@@ -53,7 +53,7 @@ export class User {
     enum: Role,
     nullable: true,
   })
-  roles: Role[]
+  role: Role
 
   @OneToMany(() => Payment, (payment) => payment.user)
   payments: Payment[]
