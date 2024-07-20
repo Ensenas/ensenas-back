@@ -18,7 +18,7 @@ export class UsersController {
     return this.usersService.findAll(request)
   }
 
-  @Post()
+  @Post('delete')
   @ApiBearerAuth()
   @Delete(':id')
   remove(@Param('id') id: string) {

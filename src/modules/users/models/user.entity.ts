@@ -5,12 +5,14 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
 import { Role } from '../interfaces/user'
 import { Country } from '../../country/country.entity'
 import { Payment } from './payment.entity'
+import { UserProgress } from './userProgress.entity'
 
 @Entity('users')
 export class User {
@@ -57,4 +59,13 @@ export class User {
 
   @OneToMany(() => Payment, (payment) => payment.user)
   payments: Payment[]
+
+  @OneToOne(() => UserProgress, (userProgress) => userProgress.user, {
+    nullable: true,
+  })
+  @JoinColumn({
+    name: 'user_progress',
+    referencedColumnName: 'id',
+  })
+  userProgress: UserProgress
 }
