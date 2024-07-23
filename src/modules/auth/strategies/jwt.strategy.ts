@@ -23,14 +23,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * @param payload
    * @dev username: Username
    * @dev mail: User mail
-   * @dev roles: User roles (default to user)
+   * @dev role: User role (default to user)
    * @returns
    */
   async validate(payload: any) {
     return {
       mail: payload.mail,
       username: payload.name + ' ' + payload.surname,
-      roles: payload.roles,
+      role: payload.role,
     }
   }
 }

@@ -27,6 +27,8 @@ export class CountryController {
     return this.countryService.create(createCountryDto)
   }
 
+  @Post('delete')
+  @Roles(Role.ADMIN)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.countryService.remove(id)

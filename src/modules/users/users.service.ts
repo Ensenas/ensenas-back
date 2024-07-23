@@ -51,7 +51,7 @@ export class UsersService {
       birth_date: birthDate,
       password: passwordHash,
       country: foundCountry,
-      roles: [Role.USER],
+      roles: Role.USER,
     })
 
     return {
@@ -63,8 +63,19 @@ export class UsersService {
     }
   }
 
-  async findAll(request: Request): Promise<User[]> {
-    return this.userRepository.find(request.query)
+  async findAll(request: Request): Promise<Partial<User>[]> {
+    const users: User[] = await this.userRepository.find(request.query)
+    const partialUsers = users.map((user) => {
+      return {
+        id: user.id,
+        mail: user.mail,
+        name: user.name,
+        surname: user.surname,
+        active: user.active,
+        role: user.role,
+      }
+    })
+    return partialUsers
   }
 
   async findOne(mail: string): Promise<User> {
