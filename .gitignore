@@ -64,3 +64,5 @@ docker/database
 tasks.md
 
 .husky
+
+docker/.docker_app_env

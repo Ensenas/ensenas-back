@@ -1,0 +1,30 @@
+#version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ensenas_docker_db
+    volumes:
+      - './database/docker/:/var/lib/postgresql/data'
+    ports:
+      - '5432:5432'
+    networks:
+      - fonder-network
+
+  app:
+    image: 733758412153.dkr.ecr.us-west-1.amazonaws.com/fonder-core:latest
+    env_file:
+      - .docker_app_env
+    depends_on:
+      - postgres
+    ports:
+      - '80:3001'
+    networks:
+      - fonder-network
+
+networks:
+  fonder-network:
+    external: true
