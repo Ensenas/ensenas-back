@@ -12,19 +12,19 @@ services:
     ports:
       - '5432:5432'
     networks:
-      - fonder-network
+      - ensenas-network
 
   app:
-    image: <TODO: ADD DOCKER HUB IMAGE>
+    image: alejol2019/ensenas-dev:latest
     env_file:
       - .docker_app_env
     depends_on:
       - postgres
     ports:
-      - '80:3001'
+      - '3001:3001'
     networks:
-      - fonder-network
+      - ensenas-network
 
 networks:
-  fonder-network:
+  ensenas-network:
     external: true
