@@ -11,6 +11,8 @@ import { APP_GUARD } from '@nestjs/core'
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard'
 import { RolesGuard } from './modules/auth/guards/roles.guard'
 import { UnitsModule } from './modules/units/unit.module'
+import { LessonsModule } from './modules/lessons/lesson.module'
+import { ChallengesModule } from './modules/challenges/challenge.module'
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { UnitsModule } from './modules/units/unit.module'
     CountriesModule,
     CommonModule,
     UnitsModule,
+    LessonsModule,
+    ChallengesModule,
   ],
   controllers: [AppController],
   providers: [

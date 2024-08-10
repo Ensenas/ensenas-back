@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
 @Entity('lessons')
 export class Lesson {
@@ -13,4 +13,7 @@ export class Lesson {
 
   @Column({ type: 'integer' })
   order: number
+
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp', default: () => 'CURRENT_DATE' })
+  updatedAt: Date
 }
