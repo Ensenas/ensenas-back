@@ -3,13 +3,15 @@ import { Request } from 'express'
 import { ApiTags } from '@nestjs/swagger'
 import { Controller, Get, Param, Delete } from '@nestjs/common'
 import { LessonsService } from './lesson.service'
+import { Public } from '../auth/decorators/public.decorator'
 
 @Controller('lessons')
 @ApiTags('Lessons')
 export class LessonsController {
   constructor(private readonly lessonsService: LessonsService) {}
 
-  @Get()
+  @Get('')
+  @Public()
   findAll(@Req() request: Request) {
     return this.lessonsService.findAll(request)
   }

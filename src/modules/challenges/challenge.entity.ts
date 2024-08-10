@@ -6,18 +6,15 @@ export class Challenge {
   @PrimaryGeneratedColumn('increment')
   id: number
 
-  @Column({ type: 'varchar', length: 200, unique: true })
-  title: string
-
-  @Column({ type: 'varchar', length: 200, unique: true })
-  description: string
-
   @ManyToOne(() => Lesson)
   @JoinColumn({
     name: 'lesson',
     referencedColumnName: 'id',
   })
   lesson: Lesson
+
+  @Column({ type: 'integer' })
+  points: number
 
   /// VIDEO WILL BE JUST A S3 LINK
   @Column({ type: 'varchar', length: 200 })

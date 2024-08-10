@@ -8,13 +8,15 @@ import { CountriesModule } from '../country/country.module'
 import { UserProgress } from './models/userProgress.entity'
 import { Path } from './models/path.entity'
 import { Question } from './models/question.entity'
+import { UserProgressService } from './userProgress.service'
+import { PathService } from '../common/services/path.service'
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Payment, UserProgress, Path, Question]),
     CountriesModule,
   ],
-  providers: [UsersService],
+  providers: [UsersService, UserProgressService, PathService],
   controllers: [UsersController],
   exports: [UsersService],
 })
