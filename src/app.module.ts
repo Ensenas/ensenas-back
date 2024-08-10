@@ -10,6 +10,7 @@ import { configService as ConfigService } from './config/config.service'
 import { APP_GUARD } from '@nestjs/core'
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard'
 import { RolesGuard } from './modules/auth/guards/roles.guard'
+import { UnitsModule } from './modules/units/unit.module'
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { RolesGuard } from './modules/auth/guards/roles.guard'
     AuthModule,
     CountriesModule,
     CommonModule,
+    UnitsModule,
   ],
   controllers: [AppController],
   providers: [
