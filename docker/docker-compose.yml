@@ -1,0 +1,30 @@
+#version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ensenas_docker_db
+    volumes:
+      - './database/docker/:/var/lib/postgresql/data'
+    ports:
+      - '5432:5432'
+    networks:
+      - ensenas-network
+
+  app:
+    image: alejol2019/ensenas-dev:latest
+    env_file:
+      - .docker_app_env
+    depends_on:
+      - postgres
+    ports:
+      - '3001:3001'
+    networks:
+      - ensenas-network
+
+networks:
+  ensenas-network:
+    external: true
