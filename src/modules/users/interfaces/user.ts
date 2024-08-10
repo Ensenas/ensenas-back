@@ -1,3 +1,5 @@
+import { Path } from '../models/path.entity'
+
 export interface JWTUser {
   userId: string
   username: string
@@ -12,4 +14,16 @@ export interface UserInfo {
   mail: string
   username: string
   roles: string[]
+}
+
+export interface CreatedUserProgress {
+  id: string
+  points: number
+  path: Path
+}
+
+export interface UpdatedUserProgress {
+  id: string
+  points: number
+  path: Path
 }

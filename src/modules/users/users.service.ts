@@ -4,21 +4,25 @@ import { Request } from 'express'
 import { CreatedUser, CreateUserDTO } from './dto/create-user.dto'
 import { User } from './models/user.entity'
 import Encryption from 'src/utils/Encryption'
-import { Role } from './interfaces'
+import { CreatedUserProgress, Role, UpdatedUserProgress } from './interfaces'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { CountryService } from '../country/country.service'
+import { SetUserPathDTO } from './dto/set-path.dto'
+import { UserProgressService } from './userProgress.service'
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     private readonly countryService: CountryService,
+    private readonly userProgressService: UserProgressService,
   ) {}
 
   private readonly logger = new Logger(UsersService.name)
 
   async create(createUserDTO: CreateUserDTO): Promise<CreatedUser> {
+    this.logger.debug(`Start creation of user ${createUserDTO.name}...`)
     if (await this._findByMail(createUserDTO.mail)) {
       throw new HttpException(
         {
@@ -84,6 +88,18 @@ export class UsersService {
 
   async remove(id: string) {
     return this.userRepository.delete(id)
+  }
+
+  async setPath(mail: string, userPathDTO: SetUserPathDTO): Promise<CreatedUserProgress> {
+    const user = await this._findOrThrow(mail)
+    const { path } = userPathDTO
+    return await this.userProgressService.create(user, path)
+  }
+
+  async updatePath(mail: string, userPathDTO: SetUserPathDTO): Promise<UpdatedUserProgress> {
+    const user = await this._findOrThrow(mail)
+    const { path: newPath } = userPathDTO
+    return await this.userProgressService.update(user, newPath)
   }
 
   /************************ PRIVATE METHODS  ************************/
