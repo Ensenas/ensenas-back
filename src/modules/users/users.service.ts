@@ -10,6 +10,7 @@ import { Repository } from 'typeorm'
 import { CountryService } from '../country/country.service'
 import { SetUserPathDTO } from './dto/set-path.dto'
 import { UserProgressService } from './userProgress.service'
+import { StartChallengeDTO } from './dto/start-challenge.dto'
 
 @Injectable()
 export class UsersService {
@@ -100,6 +101,10 @@ export class UsersService {
     const user = await this._findOrThrow(mail)
     const { path: newPath } = userPathDTO
     return await this.userProgressService.update(user, newPath)
+  }
+
+  async startChallenge(mail: string, startChallgeneDTO: StartChallengeDTO) {
+    return 'OK'
   }
 
   /************************ PRIVATE METHODS  ************************/

@@ -6,6 +6,7 @@ import { UsersService } from './users.service'
 import { Roles } from '../auth/decorators/roles.decorator'
 import { Role } from './interfaces'
 import { SetUserPathDTO } from './dto/set-path.dto'
+import { StartChallengeDTO } from './dto/start-challenge.dto'
 
 @Controller('users')
 @ApiTags('Users')
@@ -40,5 +41,13 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id)
+  }
+
+  @Post('start-challenge')
+  @ApiBearerAuth()
+  @Roles(Role.USER)
+  startChallenge(@Body() startChallengeDTO: StartChallengeDTO, @Request() req) {
+    const { mail } = req.user
+    return this.usersService.startChallenge(mail, startChallengeDTO)
   }
 }
