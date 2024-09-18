@@ -36,6 +36,14 @@ export class UsersController {
     return this.usersService.updatePath(mail, userPathDTO)
   }
 
+  @Get('/path/current')
+  @ApiBearerAuth()
+  @Roles(Role.USER)
+  currentPath(@Request() req) {
+    const { mail } = req.user
+    return this.usersService.getPath(mail)
+  }
+
   @Post('delete')
   @ApiBearerAuth()
   @Delete(':id')

@@ -47,6 +47,7 @@ export class AuthService {
         mail: userFound.mail,
         name: userFound.name,
         surname: userFound.surname,
+        role: userFound.role,
       }
     } else {
       throw new HttpException(
