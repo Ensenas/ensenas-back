@@ -13,7 +13,9 @@ export enum Role {
 export interface UserInfo {
   mail: string
   username: string
-  roles: string[]
+  name: string
+  surname: string
+  country: string
 }
 
 export interface CreatedUserProgress {

@@ -83,6 +83,22 @@ export class UsersService {
   }
 
   async findOne(mail: string): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { mail },
+      relations: ['country'],
+    })
+
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          message: 'ENSEÑAS-BACKEND: USER NOT FOUND',
+        },
+        HttpStatus.NOT_FOUND,
+      )
+    }
+
+    return user
     return await this._findByMail(mail)
   }
 

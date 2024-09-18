@@ -6,6 +6,7 @@ import { UsersService } from './users.service'
 import { Roles } from '../auth/decorators/roles.decorator'
 import { Role } from './interfaces'
 import { SetUserPathDTO } from './dto/set-path.dto'
+import { UserInfo } from '../users/interfaces'
 
 @Controller('users')
 @ApiTags('Users')
@@ -40,5 +41,19 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id)
+  }
+
+  @ApiBearerAuth()
+  @Get('profile')
+  async getProfile(@Request() req): Promise<UserInfo> {
+    const { mail, username } = req.user
+    const userInfo = await this.usersService.findOne(mail)
+    return {
+      mail: mail,
+      username: username,
+      name: userInfo.name,
+      surname: userInfo.surname,
+      country: userInfo.country.name,
+    }
   }
 }
