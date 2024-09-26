@@ -10,6 +10,7 @@ import { Repository } from 'typeorm'
 import { CountryService } from '../country/country.service'
 import { SetUserPathDTO } from './dto/set-path.dto'
 import { UserProgressService } from './userProgress.service'
+import { StartChallengeDTO } from './dto/start-challenge.dto'
 
 @Injectable()
 export class UsersService {
