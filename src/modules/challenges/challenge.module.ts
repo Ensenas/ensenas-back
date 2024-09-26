@@ -3,10 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { Challenge } from './challenge.entity'
 import { ChallengesService } from './challenge.service'
 import { ChallengeController } from './challenge.controller'
+import { UsersModule } from '../users/users.module'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Challenge])],
+  imports: [TypeOrmModule.forFeature([Challenge]), UsersModule],
   providers: [ChallengesService],
   controllers: [ChallengeController],
+  exports: [ChallengesService],
 })
 export class ChallengesModule {}

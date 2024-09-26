@@ -6,7 +6,7 @@ import { UsersService } from './users.service'
 import { Roles } from '../auth/decorators/roles.decorator'
 import { Role } from './interfaces'
 import { SetUserPathDTO } from './dto/set-path.dto'
-import { StartChallengeDTO } from './dto/start-challenge.dto'
+import { UserInfo } from '../users/interfaces'
 
 @Controller('users')
 @ApiTags('Users')
@@ -36,6 +36,14 @@ export class UsersController {
     return this.usersService.updatePath(mail, userPathDTO)
   }
 
+  @Get('/path/current')
+  @ApiBearerAuth()
+  @Roles(Role.USER)
+  currentPath(@Request() req) {
+    const { mail } = req.user
+    return this.usersService.getPath(mail)
+  }
+
   @Post('delete')
   @ApiBearerAuth()
   @Delete(':id')
@@ -43,11 +51,17 @@ export class UsersController {
     return this.usersService.remove(id)
   }
 
-  @Post('start-challenge')
   @ApiBearerAuth()
-  @Roles(Role.USER)
-  startChallenge(@Body() startChallengeDTO: StartChallengeDTO, @Request() req) {
-    const { mail } = req.user
-    return this.usersService.startChallenge(mail, startChallengeDTO)
+  @Get('profile')
+  async getProfile(@Request() req): Promise<UserInfo> {
+    const { mail, username } = req.user
+    const userInfo = await this.usersService.findOne(mail)
+    return {
+      mail: mail,
+      username: username,
+      name: userInfo.name,
+      surname: userInfo.surname,
+      country: userInfo.country.name,
+    }
   }
 }

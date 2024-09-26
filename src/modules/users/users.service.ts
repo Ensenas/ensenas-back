@@ -84,7 +84,22 @@ export class UsersService {
   }
 
   async findOne(mail: string): Promise<User> {
-    return await this._findByMail(mail)
+    const user = await this.userRepository.findOne({
+      where: { mail },
+      relations: ['country'],
+    })
+
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          message: 'ENSEÑAS-BACKEND: USER NOT FOUND',
+        },
+        HttpStatus.NOT_FOUND,
+      )
+    }
+
+    return user
   }
 
   async remove(id: string) {
@@ -92,8 +107,11 @@ export class UsersService {
   }
 
   async setPath(mail: string, userPathDTO: SetUserPathDTO): Promise<CreatedUserProgress> {
+    console.log('ME METO EN EL SET PATH')
     const user = await this._findOrThrow(mail)
+    console.log(user)
     const { path } = userPathDTO
+    console.log(path)
     return await this.userProgressService.create(user, path)
   }
 
@@ -103,8 +121,23 @@ export class UsersService {
     return await this.userProgressService.update(user, newPath)
   }
 
-  async startChallenge(mail: string, startChallgeneDTO: StartChallengeDTO) {
-    return 'OK'
+  async getPath(mail: string): Promise<any> {
+    const user = await this.userRepository.findOne({
+      where: { mail },
+      relations: ['userProgress', 'userProgress.path'],
+    })
+
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          message: 'ENSEÑAS-BACKEND: USER NOT FOUND',
+        },
+        HttpStatus.NOT_FOUND,
+      )
+    }
+
+    return user.userProgress.path.title
   }
 
   /************************ PRIVATE METHODS  ************************/
@@ -116,7 +149,7 @@ export class UsersService {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          message: 'FONDER-BACKEND: USER NOT FOUND',
+          message: 'ENSENAS-BACKEND: USER NOT FOUND',
         },
         HttpStatus.BAD_REQUEST,
       )

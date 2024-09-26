@@ -1,27 +1,26 @@
 import {
   Column,
+  CreateDateColumn,
   UpdateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  PrimaryColumn,
 } from 'typeorm'
+import { User } from './user.entity'
 import { Challenge } from 'src/modules/challenges/challenge.entity'
-import { ChallengeState } from 'src/modules/challenges/interfaces'
 
-@Entity('user_progress')
-export class UserProgress {
-  @PrimaryGeneratedColumn('increment')
-  id: number
+@Entity('user_challenge_progress')
+export class UserChallengeProgress {
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
-  @PrimaryColumn()
-  @ManyToOne(() => UserProgress)
+  @ManyToOne(() => User)
   @JoinColumn({
-    name: 'user_progress',
+    name: 'user',
     referencedColumnName: 'id',
   })
-  userProgress: UserProgress
+  user: User
 
   @ManyToOne(() => Challenge)
   @JoinColumn({
@@ -30,15 +29,14 @@ export class UserProgress {
   })
   challenge: Challenge
 
-  @Column({
-    type: 'enum',
-    enum: ChallengeState,
-    default: ChallengeState.NOT_STARTED,
-  })
-  state: ChallengeState
+  @Column({ type: 'bool' })
+  completed: boolean
 
-  @Column({ type: 'timestamp', nullable: true })
-  started: Date
+  @Column({ type: 'bool' })
+  started: boolean
+
+  @CreateDateColumn({ name: 'created_at', type: 'timestamp', default: () => 'CURRENT_DATE' })
+  createdAt: Date
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp', default: () => 'CURRENT_DATE' })
   updatedAt: Date
