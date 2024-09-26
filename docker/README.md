@@ -3,7 +3,7 @@
 1. Build app image
 
 ```bash
-docker build -t ensenas-dev -f docker/dockerfile.app.yml .
+docker build --platform linux/amd64 -t ensenas-dev -f docker/dockerfile.app.yml .
 ```
 
 2. Tag image
@@ -23,5 +23,5 @@ You will not be able to upload image if you´re not added as collaborator in doc
 3. Pull image from server
 
 ```bash
-docker pull 0xyoda/ensenas-dev
+docker pull alejol2019/ensenas-dev
 ```

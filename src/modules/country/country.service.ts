@@ -13,7 +13,14 @@ export class CountryService {
   private readonly logger = new Logger(CountryService.name)
 
   async findAll(request: Request): Promise<Country[]> {
-    return this.countryRepository.find(request.query)
+    const countries = await this.countryRepository.find(request.query)
+    const uppercasedCountries = countries.map((country) => {
+      return {
+        ...country,
+        name: country.name.charAt(0).toUpperCase() + country.name.slice(1),
+      }
+    })
+    return uppercasedCountries
   }
 
   async findOne(name: string): Promise<Country> {
