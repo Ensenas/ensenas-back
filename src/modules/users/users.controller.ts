@@ -7,11 +7,17 @@ import { Roles } from '../auth/decorators/roles.decorator'
 import { Role } from './interfaces'
 import { SetUserPathDTO } from './dto/set-path.dto'
 import { UserInfo } from '../users/interfaces'
+import { ChallengesService } from '../challenges/challenge.service';
+import { CompleteChallengeDto } from '../challenges/dto/complete-challenge.dto';
 
 @Controller('users')
 @ApiTags('Users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly challengeService: ChallengesService
+
+  ) {}
 
   @Get()
   @ApiBearerAuth()
@@ -63,5 +69,21 @@ export class UsersController {
       surname: userInfo.surname,
       country: userInfo.country.name,
     }
+  }
+
+  @Post('complete-challenge')
+  @ApiBearerAuth()
+  async completeChallenge(@Body() completeChallengeDto: CompleteChallengeDto, @Request() req) {
+    const {mail} = req.user; // Pasar el correo del usuario autenticado al DTO
+    return this.challengeService.completeChallenge(completeChallengeDto, mail);
+  }
+
+  @Get('/challenge-progress')
+  @ApiBearerAuth()
+  @Roles(Role.USER)
+  async getUserChallengeProgress(@Request() req) {
+    console.log(req)
+    const { mail } = req.mail; // Obtener el correo del usuario autenticado
+    return this.challengeService.getProgressByUser(mail);
   }
 }

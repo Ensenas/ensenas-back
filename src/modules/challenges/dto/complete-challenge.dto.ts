@@ -8,7 +8,7 @@ export class CompleteChallengeDto {
     required: true,
     example: 'Challenge id',
   })
-  challengeId: string
+  challengeId: number
 
   @IsBoolean()
   @ApiProperty({
