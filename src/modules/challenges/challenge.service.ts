@@ -58,7 +58,6 @@ export class ChallengesService {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
     const challenges = await this.userChallengeProgressService.getProgressByUser(user);
-    console.log(challenges)
     return challenges
   }
 

@@ -73,17 +73,17 @@ export class UsersController {
 
   @Post('complete-challenge')
   @ApiBearerAuth()
+  @Roles(Role.USER)
   async completeChallenge(@Body() completeChallengeDto: CompleteChallengeDto, @Request() req) {
     const {mail} = req.user; // Pasar el correo del usuario autenticado al DTO
     return this.challengeService.completeChallenge(completeChallengeDto, mail);
   }
 
-  @Get('/challenge-progress')
+  @Get('challenge-progress')
   @ApiBearerAuth()
   @Roles(Role.USER)
   async getUserChallengeProgress(@Request() req) {
-    console.log(req)
-    const { mail } = req.mail; // Obtener el correo del usuario autenticado
+    const { mail } = req.user; // Obtener el correo del usuario autenticado
     return this.challengeService.getProgressByUser(mail);
   }
 }
