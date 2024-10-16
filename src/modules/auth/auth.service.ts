@@ -44,6 +44,10 @@ export class AuthService {
       const accessToken = await this.jwtService.signAsync(payload)
       return {
         access_token: accessToken,
+        mail: userFound.mail,
+        name: userFound.name,
+        surname: userFound.surname,
+        role: userFound.role,
       }
     } else {
       throw new HttpException(
