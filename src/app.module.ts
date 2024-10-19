@@ -13,6 +13,7 @@ import { RolesGuard } from './modules/auth/guards/roles.guard'
 import { UnitsModule } from './modules/units/unit.module'
 import { LessonsModule } from './modules/lessons/lesson.module'
 import { ChallengesModule } from './modules/challenges/challenge.module'
+import { PostsModule } from './modules/posts/posts.module'
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ChallengesModule } from './modules/challenges/challenge.module'
     UnitsModule,
     LessonsModule,
     ChallengesModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [
