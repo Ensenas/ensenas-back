@@ -23,7 +23,7 @@ export class PostsService {
         content, 
         title, 
         videoUrl,
-        createdAt: new Date(),
+        created_at: new Date(),
     });
     console.log(newPost);
     return this.postRepository.save(newPost);

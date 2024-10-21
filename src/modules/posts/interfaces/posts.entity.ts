@@ -28,5 +28,5 @@ export class Post {
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp', default: () => 'now()' })
   @ApiProperty({ description: 'Date when the post was created' })
-  createdAt: Date;
+  created_at: Date;
 }
