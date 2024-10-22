@@ -71,7 +71,7 @@ export class UsersController {
     }
   }
 
-  @Post('complete-challenge')
+  @Post('/complete-challenge')
   @ApiBearerAuth()
   @Roles(Role.USER)
   async completeChallenge(@Body() completeChallengeDto: CompleteChallengeDto, @Request() req) {
@@ -79,7 +79,7 @@ export class UsersController {
     return this.challengeService.completeChallenge(completeChallengeDto, mail);
   }
 
-  @Get('challenge-progress')
+  @Get('/challenge-progress')
   @ApiBearerAuth()
   @Roles(Role.USER)
   async getUserChallengeProgress(@Request() req) {
