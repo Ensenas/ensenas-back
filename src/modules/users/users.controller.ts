@@ -7,16 +7,15 @@ import { Roles } from '../auth/decorators/roles.decorator'
 import { Role } from './interfaces'
 import { SetUserPathDTO } from './dto/set-path.dto'
 import { UserInfo } from '../users/interfaces'
-import { ChallengesService } from '../challenges/challenge.service';
-import { CompleteChallengeDto } from '../challenges/dto/complete-challenge.dto';
+import { ChallengesService } from '../challenges/challenge.service'
+import { CompleteChallengeDto } from '../challenges/dto/complete-challenge.dto'
 
 @Controller('users')
 @ApiTags('Users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly challengeService: ChallengesService
-
+    private readonly challengeService: ChallengesService,
   ) {}
 
   @Get()
@@ -75,15 +74,15 @@ export class UsersController {
   @ApiBearerAuth()
   @Roles(Role.USER)
   async completeChallenge(@Body() completeChallengeDto: CompleteChallengeDto, @Request() req) {
-    const {mail} = req.user; // Pasar el correo del usuario autenticado al DTO
-    return this.challengeService.completeChallenge(completeChallengeDto, mail);
+    const { mail } = req.user // Pasar el correo del usuario autenticado al DTO
+    return this.challengeService.completeChallenge(completeChallengeDto, mail)
   }
 
   @Get('/challenge-progress')
   @ApiBearerAuth()
   @Roles(Role.USER)
   async getUserChallengeProgress(@Request() req) {
-    const { mail } = req.user; // Obtener el correo del usuario autenticado
-    return this.challengeService.getProgressByUser(mail);
+    const { mail } = req.user // Obtener el correo del usuario autenticado
+    return this.challengeService.getProgressByUser(mail)
   }
 }

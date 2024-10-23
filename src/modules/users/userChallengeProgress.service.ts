@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { UserChallengeProgress } from './models/userChallengeProgress.entity';
-import { User } from './models/user.entity';
-import { Challenge } from '../challenges/challenge.entity';
-import { CompleteChallengeDto } from '../challenges/dto/complete-challenge.dto';
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { UserChallengeProgress } from './models/userChallengeProgress.entity'
+import { User } from './models/user.entity'
+import { Challenge } from '../challenges/challenge.entity'
+import { CompleteChallengeDto } from '../challenges/dto/complete-challenge.dto'
 
 @Injectable()
 export class UserChallengeProgressService {
@@ -15,8 +15,11 @@ export class UserChallengeProgressService {
     @InjectRepository(Challenge) private challengeRepository: Repository<Challenge>,
   ) {}
 
-  async findOrUpdateProgress(user: User, completeChallengeDto: CompleteChallengeDto): Promise<UserChallengeProgress> {
-    const { challengeId, result } = completeChallengeDto;
+  async findOrUpdateProgress(
+    user: User,
+    completeChallengeDto: CompleteChallengeDto,
+  ): Promise<UserChallengeProgress> {
+    const { challengeId, result } = completeChallengeDto
 
     // Buscar el progreso si ya existe
     let progress = await this.userChallengeProgressRepository.findOne({
@@ -24,12 +27,12 @@ export class UserChallengeProgressService {
         user: { id: user.id },
         challenge: { id: challengeId },
       },
-    });
+    })
     if (!progress) {
       // Crear un nuevo progreso si no existe
-      const challenge = await this.challengeRepository.findOne({ where: { id: challengeId } });
+      const challenge = await this.challengeRepository.findOne({ where: { id: challengeId } })
       if (!challenge) {
-        throw new NotFoundException('Challenge not found');
+        throw new NotFoundException('Challenge not found')
       }
 
       progress = this.userChallengeProgressRepository.create({
@@ -39,17 +42,17 @@ export class UserChallengeProgressService {
         completed: result, // Si el resultado es `true`, el desafío se marca como completado
         createdAt: new Date(),
         updatedAt: new Date(),
-      });
+      })
 
-      return this.userChallengeProgressRepository.save(progress);
+      return this.userChallengeProgressRepository.save(progress)
     } else {
       // Si ya existe, actualizar según el resultado
       if (result) {
-        progress.completed = true;
+        progress.completed = true
       }
-      progress.updatedAt = new Date();
+      progress.updatedAt = new Date()
 
-      return this.userChallengeProgressRepository.save(progress);
+      return this.userChallengeProgressRepository.save(progress)
     }
   }
 
@@ -59,6 +62,6 @@ export class UserChallengeProgressService {
         user: { id: user.id },
       },
       relations: ['challenge'], // Trae también los detalles del desafío
-    });
+    })
   }
 }
