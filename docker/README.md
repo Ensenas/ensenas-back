@@ -3,7 +3,7 @@
 1. Build app image
 
 ```bash
-docker build -t ensenas-dev -f docker/dockerfile.app.yml .
+docker build --platform linux/amd64 -t ensenas-dev -f docker/dockerfile.app.yml .
 ```
 
 2. Tag image
