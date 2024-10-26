@@ -9,6 +9,7 @@ import { SetUserPathDTO } from './dto/set-path.dto'
 import { UserInfo } from '../users/interfaces'
 import { ChallengesService } from '../challenges/challenge.service';
 import { CompleteChallengeDto } from '../challenges/dto/complete-challenge.dto';
+import { RegisterPaymentDto } from './dto/register-payment.dto'
 
 @Controller('users')
 @ApiTags('Users')
@@ -85,5 +86,24 @@ export class UsersController {
   async getUserChallengeProgress(@Request() req) {
     const { mail } = req.user; // Obtener el correo del usuario autenticado
     return this.challengeService.getProgressByUser(mail);
+  }
+
+  @Post('/register-payment')
+  @ApiBearerAuth()
+  @Roles(Role.USER)
+  async registerPayment(
+    @Request() req,
+    @Body() registerPaymentDto: RegisterPaymentDto,
+  ) {
+    const { mail } = req.user;
+    return this.usersService.registerPayment(mail, registerPaymentDto.suscriptionType);
+  }
+
+  @Get('/get-payment')
+  @ApiBearerAuth()
+  @Roles(Role.USER)
+  async getPayment(@Request() req){
+    const { mail } = req.user;
+    return this.usersService.getPayment(mail);
   }
 }

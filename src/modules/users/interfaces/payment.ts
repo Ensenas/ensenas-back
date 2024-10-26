@@ -1,4 +1,4 @@
 export enum PaymentSuscription {
-  ANNUAL = 'ANNUAL',
-  MONTHLY = 'MONTHLY',
+  BAISC = 'BASIC',
+  PREMIUM = 'PREMIUM',
 }
