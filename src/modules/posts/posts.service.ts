@@ -13,7 +13,7 @@ export class PostsService {
 
   async createPost(user: User, content: string, title: string, videoUrl?: string): Promise<Post> {
     // Busca al usuario por su ID, para asegurarse de que es una instancia correcta de la entidad User
-    const userEntity = await this.postRepository.manager.findOne(User, { where: { id: user.id } });
+    const userEntity = await this.postRepository.manager.findOne(User, { where: { mail: user.mail } });
     if (!userEntity) {
       throw new NotFoundException('User not found');
     }
