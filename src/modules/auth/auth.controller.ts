@@ -28,7 +28,16 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('google-login')
-  googlLogIn(@Body() signUpDto: CreateUserDTO) {
-    return this.usersService.create(signUpDto)
+  async googlLogIn(@Body() signUpDto: CreateUserDTO) {
+    try {
+      const existingUser = await this.usersService.findOne(signUpDto.mail);
+      
+      return this.authService.login(signUpDto);
+    } catch (error) {
+
+      await this.usersService.create(signUpDto);
+      
+      return this.authService.login(signUpDto);
+    }
   }
 }
