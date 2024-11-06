@@ -11,9 +11,4 @@ export class CreatePostDto {
   @IsString()
   @ApiProperty({ description: 'Título del post' })
   title: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty({ description: 'URL del video asociado', required: false })
-  videoUrl?: string;
 }
