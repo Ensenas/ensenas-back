@@ -13,6 +13,7 @@ import { UserProgressService } from './userProgress.service'
 import { StartChallengeDTO } from './dto/start-challenge.dto'
 import { Payment } from './models/payment.entity';
 import { PaymentSuscription } from './interfaces/payment'
+import { UpdateUserProfileDTO } from './dto/update-user-profile.dto'
 
 @Injectable()
 export class UsersService {
@@ -187,6 +188,33 @@ export class UsersService {
 
     return user.payments;
   }
+
+  async updateUserProfile(mail: string, updateUserProfileDTO: UpdateUserProfileDTO): Promise<User> {
+    const user = await this._findOrThrow(mail);
+
+    const { name, surname, birthDate, country } = updateUserProfileDTO;
+
+    if (name) user.name = name;
+    if (surname) user.surname = surname;
+    if (birthDate) user.birth_date = new Date(birthDate);
+
+    if (country) {
+        const foundCountry = await this.countryService.findOne(country);
+        if (!foundCountry) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.BAD_REQUEST,
+                    message: 'ENSEÑAS-BACKEND: COUNTRY NOT FOUND',
+                },
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+        user.country = foundCountry;
+    }
+
+    await this.userRepository.save(user);
+    return user;
+}
 
 
   /************************ PRIVATE METHODS  ************************/
