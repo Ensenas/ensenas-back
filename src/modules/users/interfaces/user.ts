@@ -14,6 +14,7 @@ export interface UserInfo {
   mail: string
   username: string
   name: string
+  birthDate: Date
   surname: string
   country: string
 }

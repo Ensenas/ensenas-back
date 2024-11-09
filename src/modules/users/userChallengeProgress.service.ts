@@ -15,11 +15,8 @@ export class UserChallengeProgressService {
     @InjectRepository(Challenge) private challengeRepository: Repository<Challenge>,
   ) {}
 
-  async findOrUpdateProgress(
-    user: User,
-    completeChallengeDto: CompleteChallengeDto,
-  ): Promise<UserChallengeProgress> {
-    const { challengeId, result } = completeChallengeDto
+  async findOrUpdateProgress(user: User, completeChallengeDto: CompleteChallengeDto): Promise<UserChallengeProgress[]> {
+    const { challengeId, result } = completeChallengeDto;
 
     // Buscar el progreso si ya existe
     let progress = await this.userChallengeProgressRepository.findOne({
@@ -27,7 +24,8 @@ export class UserChallengeProgressService {
         user: { id: user.id },
         challenge: { id: challengeId },
       },
-    })
+    });
+
     if (!progress) {
       // Crear un nuevo progreso si no existe
       const challenge = await this.challengeRepository.findOne({ where: { id: challengeId } })
@@ -44,7 +42,8 @@ export class UserChallengeProgressService {
         updatedAt: new Date(),
       })
 
-      return this.userChallengeProgressRepository.save(progress)
+      await this.userChallengeProgressRepository.save(progress);
+      return [progress]
     } else {
       // Si ya existe, actualizar según el resultado
       if (result) {
@@ -52,7 +51,9 @@ export class UserChallengeProgressService {
       }
       progress.updatedAt = new Date()
 
-      return this.userChallengeProgressRepository.save(progress)
+      // Guardar el progreso actualizado y retornar
+      await this.userChallengeProgressRepository.save(progress);
+      return [progress];
     }
   }
 

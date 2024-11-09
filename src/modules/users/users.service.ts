@@ -11,11 +11,15 @@ import { CountryService } from '../country/country.service'
 import { SetUserPathDTO } from './dto/set-path.dto'
 import { UserProgressService } from './userProgress.service'
 import { StartChallengeDTO } from './dto/start-challenge.dto'
+import { Payment } from './models/payment.entity';
+import { PaymentSuscription } from './interfaces/payment'
+import { UpdateUserProfileDTO } from './dto/update-user-profile.dto'
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Payment) private paymentRepository: Repository<Payment>,
     private readonly countryService: CountryService,
     private readonly userProgressService: UserProgressService,
   ) {}
@@ -139,6 +143,79 @@ export class UsersService {
 
     return user.userProgress.path.title
   }
+
+  async registerPayment(mail: string, suscriptionType: PaymentSuscription): Promise<Payment> {
+    const user = await this.userRepository.findOne({
+      where: { mail },
+      relations: ['payments'],
+    });
+
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          message: 'ENSEÑAS-BACKEND: USER NOT FOUND',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const newPayment = this.paymentRepository.create({
+      user,
+      suscription: suscriptionType,
+      date: new Date(),  // Se asigna la fecha actual
+    });
+
+    this.paymentRepository.save(newPayment);
+    return newPayment
+  }
+
+  async getPayment(mail: string): Promise<Payment[]> {
+    const user = await this.userRepository.findOne({
+      where: { mail },
+      relations: ['payments'],  // Carga la relación de pagos
+    });
+
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          message: 'ENSEÑAS-BACKEND: USER NOT FOUND',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return user.payments;
+  }
+
+  async updateUserProfile(mail: string, updateUserProfileDTO: UpdateUserProfileDTO): Promise<User> {
+    const user = await this._findOrThrow(mail);
+
+    const { name, surname, birthDate, country } = updateUserProfileDTO;
+
+    if (name) user.name = name;
+    if (surname) user.surname = surname;
+    if (birthDate) user.birth_date = new Date(birthDate);
+
+    if (country) {
+        const foundCountry = await this.countryService.findOne(country);
+        if (!foundCountry) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.BAD_REQUEST,
+                    message: 'ENSEÑAS-BACKEND: COUNTRY NOT FOUND',
+                },
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+        user.country = foundCountry;
+    }
+
+    await this.userRepository.save(user);
+    return user;
+}
+
 
   /************************ PRIVATE METHODS  ************************/
 

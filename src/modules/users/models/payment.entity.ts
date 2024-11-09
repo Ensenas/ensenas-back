@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 't
 import { User } from './user.entity'
 import { PaymentSuscription } from '../interfaces'
 
-@Entity()
+@Entity('payment')
 export class Payment {
   @PrimaryGeneratedColumn('uuid')
   id: string
