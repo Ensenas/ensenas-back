@@ -36,11 +36,11 @@ export class ChallengesService {
   }
 
   /**
-   * @dev Complete user challenge
+   * @dev Complete user challenge and return updated progress
    * @param dto
    * @param mail
    */
-  async completeChallenge(dto: CompleteChallengeDto, mail: string): Promise<void> {
+  async completeChallenge(dto: CompleteChallengeDto, mail: string): Promise<UserChallengeProgress[]> {
     // Buscar al usuario por email
     const user = await this.userService.findOne(mail);
     if (!user) {
@@ -49,16 +49,16 @@ export class ChallengesService {
 
     // Delegar la actualización o creación del progreso del desafío
     await this.userChallengeProgressService.findOrUpdateProgress(user, dto);
+    // Retornar el progreso actualizado del usuario
+    return this.userChallengeProgressService.getProgressByUser(user);
   }
 
   async getProgressByUser(mail: string): Promise<UserChallengeProgress[]> {
-
     const user = await this.userService.findOne(mail);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-    const challenges = await this.userChallengeProgressService.getProgressByUser(user);
-    return challenges
+    return this.userChallengeProgressService.getProgressByUser(user);
   }
 
   /************************ PRIVATE METHODS  ************************/

@@ -89,7 +89,8 @@ export class UsersController {
   @Roles(Role.USER)
   async completeChallenge(@Body() completeChallengeDto: CompleteChallengeDto, @Request() req) {
     const {mail} = req.user; // Pasar el correo del usuario autenticado al DTO
-    return this.challengeService.completeChallenge(completeChallengeDto, mail);
+    const progress=this.challengeService.completeChallenge(completeChallengeDto, mail);
+    return progress
   }
 
   @Get('/challenge-progress')
