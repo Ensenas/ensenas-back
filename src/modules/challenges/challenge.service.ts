@@ -1,12 +1,13 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { Request } from 'express';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Challenge } from './challenge.entity';
-import { CompleteChallengeDto } from './dto/complete-challenge.dto';
-import { UsersService } from '../users/users.service';
-import { UserChallengeProgressService } from '../users/userChallengeProgress.service';
-import { UserChallengeProgress } from '../users/models/userChallengeProgress.entity';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common'
+import { Request } from 'express'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { Challenge } from './challenge.entity'
+import { CompleteChallengeDto } from './dto/complete-challenge.dto'
+import { UsersService } from '../users/users.service'
+import { UserChallengeProgressService } from '../users/userChallengeProgress.service'
+import { UserChallengeProgress } from '../users/models/userChallengeProgress.entity'
+import { CompleteChallengResponse } from './interfaces'
 
 @Injectable()
 export class ChallengesService {
@@ -16,23 +17,23 @@ export class ChallengesService {
     private readonly userService: UsersService,
   ) {}
 
-  private readonly logger = new Logger(ChallengesService.name);
+  private readonly logger = new Logger(ChallengesService.name)
 
   async findAll(request: Request): Promise<Challenge[]> {
-    return this.challengeRepository.find(request.query);
+    return this.challengeRepository.find(request.query)
   }
 
   async findOne(id: string): Promise<Challenge> {
-    return this._findOrThrow(id);
+    return this._findOrThrow(id)
   }
 
   async remove(id: string) {
-    return this.challengeRepository.delete(id);
+    return this.challengeRepository.delete(id)
   }
 
   async create(challengeData: Partial<Challenge>): Promise<Challenge> {
-    const newChallenge = this.challengeRepository.create(challengeData);
-    return this.challengeRepository.save(newChallenge);
+    const newChallenge = this.challengeRepository.create(challengeData)
+    return this.challengeRepository.save(newChallenge)
   }
 
   /**
@@ -42,9 +43,9 @@ export class ChallengesService {
    */
   async completeChallenge(dto: CompleteChallengeDto, mail: string): Promise<UserChallengeProgress[]> {
     // Buscar al usuario por email
-    const user = await this.userService.findOne(mail);
+    const user = await this.userService.findOne(mail)
     if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND)
     }
 
     // Delegar la actualización o creación del progreso del desafío
@@ -56,7 +57,7 @@ export class ChallengesService {
   async getProgressByUser(mail: string): Promise<UserChallengeProgress[]> {
     const user = await this.userService.findOne(mail);
     if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND)
     }
     return this.userChallengeProgressService.getProgressByUser(user);
   }
@@ -64,7 +65,7 @@ export class ChallengesService {
   /************************ PRIVATE METHODS  ************************/
 
   private async _findOrThrow(id: string): Promise<Challenge> {
-    const challengeFound = await this._findById(id);
+    const challengeFound = await this._findById(id)
 
     if (!challengeFound) {
       throw new HttpException(
@@ -73,13 +74,13 @@ export class ChallengesService {
           message: 'ENSENAS-BACKEND: CHALLENGE NOT FOUND',
         },
         HttpStatus.BAD_REQUEST,
-      );
+      )
     }
 
-    return challengeFound;
+    return challengeFound
   }
 
   private async _findById(id: string): Promise<Challenge> {
-    return this.challengeRepository.findOneBy({ id: parseInt(id) });
+    return this.challengeRepository.findOneBy({ id: parseInt(id) })
   }
 }

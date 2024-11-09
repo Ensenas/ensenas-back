@@ -11,13 +11,13 @@ import { ChallengesService } from '../challenges/challenge.service';
 import { CompleteChallengeDto } from '../challenges/dto/complete-challenge.dto';
 import { RegisterPaymentDto } from './dto/register-payment.dto'
 import { UpdateUserProfileDTO } from './dto/update-user-profile.dto'
+
 @Controller('users')
 @ApiTags('Users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly challengeService: ChallengesService
-
+    private readonly challengeService: ChallengesService,
   ) {}
 
   @Get()
@@ -73,6 +73,7 @@ export class UsersController {
     }
   }
 
+
   @Patch('/profile')
   @ApiBearerAuth()
   @Roles(Role.USER)
@@ -97,8 +98,8 @@ export class UsersController {
   @ApiBearerAuth()
   @Roles(Role.USER)
   async getUserChallengeProgress(@Request() req) {
-    const { mail } = req.user; // Obtener el correo del usuario autenticado
-    return this.challengeService.getProgressByUser(mail);
+    const { mail } = req.user // Obtener el correo del usuario autenticado
+    return this.challengeService.getProgressByUser(mail)
   }
 
   @Post('/register-payment')
