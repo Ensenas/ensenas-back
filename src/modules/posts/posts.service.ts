@@ -23,7 +23,7 @@ export class PostsService {
 
   async createPost(user: User, content: string, title: string, file: Express.Multer.File): Promise<Post> {
     // Busca al usuario por su ID
-    const userEntity = await this.postRepository.manager.findOne(User, { where: { id: user.id } });
+    const userEntity = await this.postRepository.manager.findOne(User, { where: { mail: user.mail } });
     if (!userEntity) {
       throw new NotFoundException('User not found');
     }
