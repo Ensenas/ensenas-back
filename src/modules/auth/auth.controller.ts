@@ -30,14 +30,20 @@ export class AuthController {
   @Post('google-login')
   async googlLogIn(@Body() signUpDto: CreateUserDTO) {
     try {
-      const existingUser = await this.usersService.findOne(signUpDto.mail);
-      
-      return this.authService.login(signUpDto);
-    } catch (error) {
+      const existingUser = await this.usersService.findOne(signUpDto.mail)
 
-      await this.usersService.create(signUpDto);
-      
-      return this.authService.login(signUpDto);
+      return this.authService.login(signUpDto)
+    } catch (error) {
+      await this.usersService.create(signUpDto)
+
+      return this.authService.login(signUpDto)
     }
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('recover-password')
+  async recoverPassword(@Body() { mail }: { mail: string }) {
+    return this.authService.initiatePasswordRecovery(mail)
   }
 }

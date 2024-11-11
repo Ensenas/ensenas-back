@@ -59,4 +59,27 @@ export class AuthService {
       )
     }
   }
+
+  async initiatePasswordRecovery(mail: string) {
+    const user = await this.usersService.findOne(mail)
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          message: 'ENSEÑAS-BACKEND: USER NOT FOUND',
+        },
+        HttpStatus.NOT_FOUND,
+      )
+    }
+
+    // Set random password
+    const randomPassword = Math.random().toString(36).substring(2, 15)
+    console.log('Random password:', randomPassword)
+    await this.usersService.updateUserPassword(mail, randomPassword)
+
+    return {
+      message: 'Password recovery initiated. Check your email for instructions.',
+      newPassword: randomPassword,
+    }
+  }
 }
