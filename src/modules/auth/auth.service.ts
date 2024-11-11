@@ -75,7 +75,7 @@ export class AuthService {
     // Set random password
     const randomPassword = Math.random().toString(36).substring(2, 15)
     console.log('Random password:', randomPassword)
-    await this.usersService.updateUserPassword(mail, randomPassword)
+    await this.usersService.updateUserPassword(mail, randomPassword, true)
 
     return {
       message: 'Password recovery initiated. Check your email for instructions.',

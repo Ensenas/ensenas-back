@@ -7,10 +7,11 @@ import { Roles } from '../auth/decorators/roles.decorator'
 import { Role } from './interfaces'
 import { SetUserPathDTO } from './dto/set-path.dto'
 import { UserInfo } from '../users/interfaces'
-import { ChallengesService } from '../challenges/challenge.service';
-import { CompleteChallengeDto } from '../challenges/dto/complete-challenge.dto';
+import { ChallengesService } from '../challenges/challenge.service'
+import { CompleteChallengeDto } from '../challenges/dto/complete-challenge.dto'
 import { RegisterPaymentDto } from './dto/register-payment.dto'
 import { UpdateUserProfileDTO } from './dto/update-user-profile.dto'
+import { UpdatePasswordDTO } from './dto/update-password.dto'
 
 @Controller('users')
 @ApiTags('Users')
@@ -73,14 +74,10 @@ export class UsersController {
     }
   }
 
-
   @Patch('/profile')
   @ApiBearerAuth()
   @Roles(Role.USER)
-  async updateProfile(
-    @Request() req,
-    @Body() updateUserProfileDTO: UpdateUserProfileDTO,
-  ) {
+  async updateProfile(@Request() req, @Body() updateUserProfileDTO: UpdateUserProfileDTO) {
     const { mail } = req.user
     return this.usersService.updateUserProfile(mail, updateUserProfileDTO)
   }
@@ -89,8 +86,8 @@ export class UsersController {
   @ApiBearerAuth()
   @Roles(Role.USER)
   async completeChallenge(@Body() completeChallengeDto: CompleteChallengeDto, @Request() req) {
-    const {mail} = req.user; // Pasar el correo del usuario autenticado al DTO
-    const progress=this.challengeService.completeChallenge(completeChallengeDto, mail);
+    const { mail } = req.user // Pasar el correo del usuario autenticado al DTO
+    const progress = this.challengeService.completeChallenge(completeChallengeDto, mail)
     return progress
   }
 
@@ -105,19 +102,24 @@ export class UsersController {
   @Post('/register-payment')
   @ApiBearerAuth()
   @Roles(Role.USER)
-  async registerPayment(
-    @Request() req,
-    @Body() registerPaymentDto: RegisterPaymentDto,
-  ) {
-    const { mail } = req.user;
-    return this.usersService.registerPayment(mail, registerPaymentDto.suscriptionType);
+  async registerPayment(@Request() req, @Body() registerPaymentDto: RegisterPaymentDto) {
+    const { mail } = req.user
+    return this.usersService.registerPayment(mail, registerPaymentDto.suscriptionType)
   }
 
   @Get('/get-payment')
   @ApiBearerAuth()
   @Roles(Role.USER)
-  async getPayment(@Request() req){
-    const { mail } = req.user;
-    return this.usersService.getPayment(mail);
+  async getPayment(@Request() req) {
+    const { mail } = req.user
+    return this.usersService.getPayment(mail)
+  }
+
+  @Post('/update-password')
+  @ApiBearerAuth()
+  @Roles(Role.USER)
+  async updatePassword(@Request() req, @Body() updatePasswordDto: UpdatePasswordDTO) {
+    const { mail } = req.user
+    return this.usersService.updateUserPassword(mail, updatePasswordDto.password)
   }
 }

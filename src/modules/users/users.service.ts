@@ -10,8 +10,7 @@ import { Repository } from 'typeorm'
 import { CountryService } from '../country/country.service'
 import { SetUserPathDTO } from './dto/set-path.dto'
 import { UserProgressService } from './userProgress.service'
-import { StartChallengeDTO } from './dto/start-challenge.dto'
-import { Payment } from './models/payment.entity';
+import { Payment } from './models/payment.entity'
 import { PaymentSuscription } from './interfaces/payment'
 import { UpdateUserProfileDTO } from './dto/update-user-profile.dto'
 
@@ -60,7 +59,7 @@ export class UsersService {
       birth_date: birthDate,
       password: passwordHash,
       country: foundCountry,
-      roles: Role.USER,
+      role: Role.USER,
     })
 
     return {
@@ -148,7 +147,7 @@ export class UsersService {
     const user = await this.userRepository.findOne({
       where: { mail },
       relations: ['payments'],
-    });
+    })
 
     if (!user) {
       throw new HttpException(
@@ -157,24 +156,24 @@ export class UsersService {
           message: 'ENSEÑAS-BACKEND: USER NOT FOUND',
         },
         HttpStatus.NOT_FOUND,
-      );
+      )
     }
 
     const newPayment = this.paymentRepository.create({
       user,
       suscription: suscriptionType,
-      date: new Date(),  // Se asigna la fecha actual
-    });
+      date: new Date(), // Se asigna la fecha actual
+    })
 
-    this.paymentRepository.save(newPayment);
+    this.paymentRepository.save(newPayment)
     return newPayment
   }
 
   async getPayment(mail: string): Promise<Payment[]> {
     const user = await this.userRepository.findOne({
       where: { mail },
-      relations: ['payments'],  // Carga la relación de pagos
-    });
+      relations: ['payments'], // Carga la relación de pagos
+    })
 
     if (!user) {
       throw new HttpException(
@@ -183,39 +182,56 @@ export class UsersService {
           message: 'ENSEÑAS-BACKEND: USER NOT FOUND',
         },
         HttpStatus.NOT_FOUND,
-      );
+      )
     }
 
-    return user.payments;
+    return user.payments
   }
 
   async updateUserProfile(mail: string, updateUserProfileDTO: UpdateUserProfileDTO): Promise<User> {
-    const user = await this._findOrThrow(mail);
+    const user = await this._findOrThrow(mail)
 
-    const { name, surname, birthDate, country } = updateUserProfileDTO;
+    const { name, surname, birthDate, country } = updateUserProfileDTO
 
-    if (name) user.name = name;
-    if (surname) user.surname = surname;
-    if (birthDate) user.birth_date = new Date(birthDate);
-
-    if (country) {
-        const foundCountry = await this.countryService.findOne(country);
-        if (!foundCountry) {
-            throw new HttpException(
-                {
-                    status: HttpStatus.BAD_REQUEST,
-                    message: 'ENSEÑAS-BACKEND: COUNTRY NOT FOUND',
-                },
-                HttpStatus.BAD_REQUEST,
-            );
-        }
-        user.country = foundCountry;
+    // Create update object with only provided values
+    const updates: Partial<User> = {
+      ...(name && { name }),
+      ...(surname && { surname }),
+      ...(birthDate && { birth_date: new Date(birthDate) }),
     }
 
-    await this.userRepository.save(user);
-    return user;
-}
+    // Merge updates with existing user
+    Object.assign(user, updates)
 
+    if (country) {
+      const foundCountry = await this.countryService.findOne(country)
+      if (!foundCountry) {
+        throw new HttpException(
+          {
+            status: HttpStatus.BAD_REQUEST,
+            message: 'ENSEÑAS-BACKEND: COUNTRY NOT FOUND',
+          },
+          HttpStatus.BAD_REQUEST,
+        )
+      }
+      user.country = foundCountry
+    }
+
+    await this.userRepository.save(user)
+    return user
+  }
+
+  async updateUserPassword(
+    mail: string,
+    password: string,
+    markToResetPassword?: boolean,
+  ): Promise<User> {
+    const user = await this._findOrThrow(mail)
+    user.password = await Encryption.getInstance().hash(password)
+    user.resetPassword = markToResetPassword || false
+    await this.userRepository.save(user)
+    return user
+  }
 
   /************************ PRIVATE METHODS  ************************/
 

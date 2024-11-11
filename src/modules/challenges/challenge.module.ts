@@ -6,8 +6,7 @@ import { ChallengeController } from './challenge.controller'
 import { UsersModule } from '../users/users.module'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Challenge]), 
-  forwardRef(() => UsersModule)],
+  imports: [TypeOrmModule.forFeature([Challenge]), forwardRef(() => UsersModule)],
   providers: [ChallengesService],
   controllers: [ChallengeController],
   exports: [ChallengesService],

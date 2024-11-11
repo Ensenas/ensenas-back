@@ -11,7 +11,7 @@ export class Lesson {
   @Column({ type: 'varchar', length: 200, unique: true })
   description: string
 
-  @Column({ type: 'varchar', length: 1000, unique: true, nullable:true })
+  @Column({ type: 'varchar', length: 1000, unique: true, nullable: true })
   detailedDescription: string
 
   @Column({ type: 'integer' })
