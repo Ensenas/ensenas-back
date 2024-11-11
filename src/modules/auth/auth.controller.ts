@@ -32,12 +32,12 @@ export class AuthController {
     try {
       const existingUser = await this.usersService.findOne(signUpDto.mail);
       
-      return this.authService.login(signUpDto);
+      return this.authService.loginGoogle(signUpDto);
     } catch (error) {
 
       await this.usersService.create(signUpDto);
       
-      return this.authService.login(signUpDto);
+      return this.authService.loginGoogle(signUpDto);
     }
   }
 }

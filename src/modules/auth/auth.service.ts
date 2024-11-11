@@ -59,4 +59,34 @@ export class AuthService {
       )
     }
   }
+
+  async loginGoogle(user: SignInDTO) {
+    const userFound: User | null = await this.usersService.findOne(user.mail)
+
+    if (!userFound) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'ENSEÑAS-BACK: USER OR PASSWORD ERROR',
+        },
+        HttpStatus.BAD_REQUEST,
+      )
+    }
+
+      const payload = {
+        mail: userFound.mail,
+        name: userFound.name,
+        surname: userFound.surname,
+        role: userFound.role,
+      }
+      const accessToken = await this.jwtService.signAsync(payload)
+      return {
+        access_token: accessToken,
+        mail: userFound.mail,
+        name: userFound.name,
+        surname: userFound.surname,
+        role: userFound.role,
+      }
+    } 
 }
+
