@@ -11,15 +11,23 @@ import { Question } from './models/question.entity'
 import { UserProgressService } from './userProgress.service'
 import { PathService } from '../common/services/path.service'
 import { UserChallengeProgress } from './models/userChallengeProgress.entity'
-import { UserChallengeProgressService } from './userChallengeProgress.service';
-import { Challenge } from '../challenges/challenge.entity';
+import { UserChallengeProgressService } from './userChallengeProgress.service'
+import { Challenge } from '../challenges/challenge.entity'
 import { ChallengesModule } from '../challenges/challenge.module'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Payment, UserProgress, Path, Question, UserChallengeProgress, Challenge]),
+    TypeOrmModule.forFeature([
+      User,
+      Payment,
+      UserProgress,
+      Path,
+      Question,
+      UserChallengeProgress,
+      Challenge,
+    ]),
     CountriesModule,
-    ChallengesModule
+    ChallengesModule,
   ],
   providers: [UsersService, UserProgressService, PathService, UserChallengeProgressService],
   controllers: [UsersController],

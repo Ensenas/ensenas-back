@@ -13,7 +13,7 @@ import { Role } from '../interfaces/user'
 import { Country } from '../../country/country.entity'
 import { Payment } from './payment.entity'
 import { UserProgress } from './userProgress.entity'
-import { Post } from '../../posts/interfaces/posts.entity';
+import { Post } from '../../posts/interfaces/posts.entity'
 
 @Entity('users')
 export class User {
@@ -71,5 +71,8 @@ export class User {
   userProgress: UserProgress
 
   @OneToMany(() => Post, (post) => post.user)
-  posts: Post[];
+  posts: Post[]
+
+  @Column({ name: 'reset_password', default: false })
+  resetPassword: boolean
 }
