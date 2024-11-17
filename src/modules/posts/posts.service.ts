@@ -41,9 +41,8 @@ export class PostsService {
     if (file) {
       const uploadParams = {
         Bucket: process.env.S3_BUCKET_NAME,
-        Key: `videos/${Date.now()}_${file.originalname}`, // Generamos un nombre único
+        Key: `${Date.now()}_${file.originalname}`, // Generamos un nombre único
         Body: file.buffer,
-        ACL: 'public-read', // Hacemos que el video sea accesible públicamente
         ContentType: file.mimetype,
       }
 
