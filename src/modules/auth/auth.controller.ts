@@ -1,9 +1,9 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Request } from '@nestjs/common'
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { UsersService } from '../users/users.service'
 import { CreateUserDTO } from '../users/dto/create-user.dto'
 import { SignInDTO } from './dto/sign-in.dto'
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { ApiTags } from '@nestjs/swagger'
 import { Public } from './decorators/public.decorator'
 
 @Controller('auth')
@@ -13,7 +13,7 @@ export class AuthController {
 
   @Public()
   @HttpCode(HttpStatus.OK)
-  @Post('signUp')
+  @Post('sign-up')
   signUp(@Body() signUpDto: CreateUserDTO) {
     return this.usersService.create(signUpDto)
   }
@@ -25,9 +25,25 @@ export class AuthController {
     return this.authService.login(signInDto)
   }
 
-  @ApiBearerAuth()
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('google-login')
+  async googlLogIn(@Body() signUpDto: CreateUserDTO) {
+    try {
+      const existingUser = await this.usersService.findOne(signUpDto.mail)
+
+      return this.authService.login(signUpDto)
+    } catch (error) {
+      await this.usersService.create(signUpDto)
+
+      return this.authService.login(signUpDto)
+    }
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('recover-password')
+  async recoverPassword(@Body() { mail }: { mail: string }) {
+    return this.authService.initiatePasswordRecovery(mail)
   }
 }

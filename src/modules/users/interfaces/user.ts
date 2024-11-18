@@ -1,3 +1,5 @@
+import { Path } from '../models/path.entity'
+
 export interface JWTUser {
   userId: string
   username: string
@@ -5,14 +7,26 @@ export interface JWTUser {
 
 export enum Role {
   USER = 'USER',
-  COURT = 'COURT',
-  ARBITER = 'ARBITER',
-  DELEGATE = 'DELEGATE',
   ADMIN = 'ADMIN',
 }
 
 export interface UserInfo {
-  username: string
   mail: string
-  roles: string[]
+  username: string
+  name: string
+  birthDate: Date
+  surname: string
+  country: string
+}
+
+export interface CreatedUserProgress {
+  id: string
+  points: number
+  path: Path
+}
+
+export interface UpdatedUserProgress {
+  id: string
+  points: number
+  path: Path
 }

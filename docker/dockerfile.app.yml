@@ -1,0 +1,45 @@
+################################################################ BUILDING PHASE ################################################################
+
+# Building layer
+FROM node:20-alpine as BUILDER
+
+WORKDIR /app
+
+# Copy configuration files
+COPY tsconfig*.json ./
+COPY package.json ./
+
+# Install dependencies from yarn-lock.json
+RUN yarn install --frozen-lockfile
+
+# Copy application sources (.ts, .tsx, js)
+COPY src/ src/
+
+# Build application (produces dist/ folder)
+RUN yarn build
+
+################################################################ DEPLOY PHASE ################################################################
+
+# Runtime (production) layer
+FROM node:20-alpine as production
+
+LABEL TARGET="ENSENAS-DEV"
+
+WORKDIR /app
+
+# Copy dependencies files
+COPY package.json ./
+COPY yarn.lock ./
+
+# Install runtime dependecies (without dev/test dependecies)
+RUN yarn install --frozen-lockfile 
+
+# Copy production build
+COPY --from=BUILDER /app/dist/ ./dist/
+
+# Expose application port
+EXPOSE 3001
+EXPOSE 80
+
+# Start application
+CMD [ "node", "dist/main.js" ]

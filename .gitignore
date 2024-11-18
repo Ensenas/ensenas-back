@@ -58,3 +58,11 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 .envrc
 
 .vscode
+
+docker/database
+
+tasks.md
+
+.husky
+
+docker/.docker_app_env

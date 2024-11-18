@@ -1,0 +1,11 @@
+# GENERAL CONFIG
+VERSION=0.0.1
+PORT=3001
+MODE=DEV
+NODE_ENV=DEV
+BCRYPT_ROUNDS=10
+
+# POSTGRES
+POSTGRES_URL=postgres://admin:admin@host.docker.internal:5433/ensenas_docker_db
+RUN_MIGRATIONS=true
+

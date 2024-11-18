@@ -3,7 +3,7 @@ import { UsersService } from '../users/users.service'
 import { JwtService } from '@nestjs/jwt'
 import Encryption from 'src/utils/Encryption'
 import { SignInDTO } from './dto/sign-in.dto'
-import { User } from '../users/user.entity'
+import { User } from '../users/models/user.entity'
 
 @Injectable()
 export class AuthService {
@@ -25,10 +25,10 @@ export class AuthService {
     if (!userFound) {
       throw new HttpException(
         {
-          status: HttpStatus.NOT_FOUND,
-          message: 'FONDER-BACKEND: USER NOT FOUND',
+          status: HttpStatus.BAD_REQUEST,
+          message: 'ENSEÑAS-BACK: USER OR PASSWORD ERROR',
         },
-        HttpStatus.NOT_FOUND,
+        HttpStatus.BAD_REQUEST,
       )
     }
 
@@ -37,20 +37,49 @@ export class AuthService {
     if (valid) {
       const payload = {
         mail: userFound.mail,
+        name: userFound.name,
+        surname: userFound.surname,
         role: userFound.role,
       }
-      const accessToken = this.jwtService.sign(payload)
+      const accessToken = await this.jwtService.signAsync(payload)
       return {
         access_token: accessToken,
+        mail: userFound.mail,
+        name: userFound.name,
+        surname: userFound.surname,
+        role: userFound.role,
       }
     } else {
       throw new HttpException(
         {
           status: HttpStatus.UNAUTHORIZED,
-          message: 'AIFA-BACKEND: VALIDATION FAILED',
+          message: 'ENSEÑAS-BACK: VALIDATION FAILED',
         },
         HttpStatus.UNAUTHORIZED,
       )
+    }
+  }
+
+  async initiatePasswordRecovery(mail: string) {
+    const user = await this.usersService.findOne(mail)
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          message: 'ENSEÑAS-BACKEND: USER NOT FOUND',
+        },
+        HttpStatus.NOT_FOUND,
+      )
+    }
+
+    // Set random password
+    const randomPassword = Math.random().toString(36).substring(2, 15)
+    console.log('Random password:', randomPassword)
+    await this.usersService.updateUserPassword(mail, randomPassword, true)
+
+    return {
+      message: 'Password recovery initiated. Check your email for instructions.',
+      newPassword: randomPassword,
     }
   }
 }

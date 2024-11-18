@@ -4,7 +4,12 @@ import { AppModule } from './app.module'
 import { INestApplication, ValidationPipe } from '@nestjs/common'
 
 async function bootstrap() {
-  const app: INestApplication = await NestFactory.create(AppModule)
+  const app: INestApplication = await NestFactory.create(AppModule, {
+    logger:
+      process.env.MODE === 'DEV'
+        ? ['log', 'error', 'warn', 'debug', 'verbose']
+        : ['log', 'error', 'warn'],
+  })
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -14,8 +19,8 @@ async function bootstrap() {
   )
 
   const options = new DocumentBuilder()
-    .setTitle('AIFA Main Backend')
-    .setDescription('AIFA bakend')
+    .setTitle('Enseñas Backend')
+    .setDescription('Enseñas bakend')
     .setVersion(process.env.VERSION ? process.env.VERSION : 'no-version')
     .addTag('v0.0.1-MVP')
     .addBearerAuth()
@@ -25,6 +30,6 @@ async function bootstrap() {
 
   SwaggerModule.setup('api', app, document)
 
-  await app.listen(3000)
+  await app.listen(process.env.PORT ? process.env.PORT : 3000)
 }
 bootstrap()
